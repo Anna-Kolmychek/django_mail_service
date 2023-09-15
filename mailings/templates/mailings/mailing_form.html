@@ -1,0 +1,103 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block light_block %}
+<div class="row align-items-center">
+    <div class="col-8 text-center">
+        <h1 class="">
+            {% if object %}
+                Редактирование рассылки
+            {% else%}
+                Новая рассылка
+            {% endif %}
+        </h1>
+    </div>
+    <div class="col-4">
+            {% if object %}
+                <img src="{% static 'mailings/img/update_main_img.png' %}" class="img-fluid"/>
+            {% else%}
+                <img src="{% static 'mailings/img/create_main_img.png' %}" class="img-fluid"/>
+            {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block dark_block %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-6">
+            <div class="pb-3">
+                <span class="text-secondary">
+                    Название рассылки
+                </span>
+                {{ form.title }}
+            </div>
+            <div class="pb-3">
+                <span class="text-secondary">
+                    Описание рассылки
+                </span>
+                {{ form.desription }}
+            </div>
+            <div class="pb-3">
+                <div class="row">
+                    <div class="col-6">
+                        <span class="text-secondary">
+                            Время отправки (с)
+                        </span>
+                        {{ form.sending_time_start }}
+                    </div>
+                    <div class="col-6">
+                        <span class="text-secondary">
+                            Время отправки (по)
+                        </span>
+                        {{ form.sending_time_end }}
+                    </div>
+                </div>
+            </div>
+            <div class="pb-3">
+                <div class="row">
+                    <div class="col-6">
+                        <span class="text-secondary">
+                            Периодичность
+                        </span>
+                        {{ form.periodicity }}
+                    </div>
+                    <div class="col-6">
+                        <span class="text-secondary">
+                            Статус
+                        </span>
+                        {{ form.status }}
+                    </div>
+                </div>
+            </div>
+            <div class="pb-3">
+                <span class="text-secondary">
+                    Заголовок письма
+                </span>
+                {{ form.mail_title }}
+            </div>
+            <div class="pb-3">
+                <span class="text-secondary">
+                    Тело письма
+                </span>
+                {{ form.mail_content }}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-secondary">
+        {% if object %}
+            Сохранить
+        {% else %}
+            Создать
+        {% endif %}
+    </button>
+    <a class="btn btn-secondary" href="{% url 'mailings:list' %}">
+        Отмена
+    </a>
+</form>
+
+
+{% endblock %}
