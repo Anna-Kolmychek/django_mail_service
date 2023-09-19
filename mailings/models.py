@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 
 from main.models import NULLABLE
+from users.models import User
 
 
 class Mailing(models.Model):
@@ -39,6 +40,9 @@ class Mailing(models.Model):
 
     mail_title = models.CharField(max_length=300, verbose_name='Тема письма')
     mail_content = models.TextField(verbose_name='Содержание письма')
+
+    user_admin = User.objects.get(email='admin@mail.com').pk
+    owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, default=user_admin)
     # связь с клиентами
 
 

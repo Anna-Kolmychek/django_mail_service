@@ -1,10 +1,10 @@
 {% load static %}
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="ru" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Почтовик</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'custom_css/style.css' %}" rel="stylesheet">
 
@@ -119,15 +119,71 @@
                 </ul>
             </li>
             <li class="my-3">
-                <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
-                         class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                    Профиль
-                </a>
+                {% if user.is_authenticated %}
+                    {% if user.first_name|add:user.last_name != '' %}
+                        {{ user.first_name|add:' '|add:user.last_name }}
+                    {% else %}
+                        {{ user.email }}
+                    {% endif %}
+                <ul class="list-unstyled ps-4">
+                    <li class="my-2">
+                        <a href="{% url 'users:logout' %}" class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Выйти
+                        </a>
+                    </li>
+                    <li class="my-2">
+                        <a href="{% url 'users:profile' %}" class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Профиль
+                        </a>
+                    </li>
+                </ul>
+                {% else %}
+                Пользователь
+                <ul class="list-unstyled ps-4">
+                    <li class="my-2">
+                        <a href="{% url 'users:login' %}" class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Войти
+                        </a>
+                    </li>
+                    <li class="my-2">
+                        <a href="{% url 'users:register' %}" class="link-body-emphasis d-inline-flex text-decoration-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"
+                                 class="bi bi-chevron-right me-2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Регистрация
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
+
             </li>
+<!--            <li class="my-3">-->
+<!--                <a href="#" class="link-body-emphasis d-inline-flex text-decoration-none ">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor"-->
+<!--                         class="bi bi-chevron-right me-2" viewBox="0 0 16 16">-->
+<!--                        <path fill-rule="evenodd"-->
+<!--                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>-->
+<!--                    </svg>-->
+<!--                    Профиль-->
+<!--                </a>-->
+<!--            </li>-->
         </ul>
     </div>
 </div>

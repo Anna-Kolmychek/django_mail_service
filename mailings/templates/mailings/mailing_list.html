@@ -17,6 +17,7 @@
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
 
+    {% if user.is_authenticated %}
     <div class="col">
         <div class="card h-100 ">
             <div class="card-header text-center border-warning text-warning-emphasis">
@@ -30,6 +31,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     {% for object in object_list %}
     <div class="col">
