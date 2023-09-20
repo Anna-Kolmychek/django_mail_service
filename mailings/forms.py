@@ -1,6 +1,6 @@
 from django import forms
 
-from mailings.models import Mailing
+from mailings.models import Mailing, Client
 
 
 class StyleFormMixin:
@@ -16,3 +16,13 @@ class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
         exclude = ['owner']
+
+
+class ClientForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = Client
+        exclude = [
+            'mailing',
+            # 'comment',
+        ]

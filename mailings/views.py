@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.forms import inlineformset_factory
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
-from mailings.forms import MailingForm
-from mailings.models import Mailing
+from mailings.forms import MailingForm, ClientForm
+from mailings.models import Mailing, Client
 
 
 class MailingListView(ListView):
@@ -11,7 +13,10 @@ class MailingListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(owner=self.request.user).all()
+        if self.request.user.is_authenticated:
+            queryset = queryset.filter(owner=self.request.user).all()
+        else:
+            queryset = Mailing.objects.none()
         return queryset
 
 
@@ -35,12 +40,33 @@ class MailingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     form_class = MailingForm
 
     def get_success_url(self):
-        return reverse('mailings:detail', args=(self.object.pk,))
+        return reverse('mailings:update', args=(self.object.pk,))
 
     def test_func(self):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
         return is_owner
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        ClientFormest = inlineformset_factory(Mailing, Client, form=ClientForm, can_delete=True, extra=1)
+        if self.request.method == 'POST':
+            formset = ClientFormest(self.request.POST, instance=self.object)
+        else:
+            formset = ClientFormest(instance=self.object)
+
+        context_data['formset'] = formset
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        self.object = form.save()
+
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        return super().form_valid(form)
 
 
 class MailingDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
