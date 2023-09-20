@@ -80,6 +80,33 @@
             {{ object.mail_content }}
         </div>
     </div>
+    <div class="col-6">
+        {% for client in object.client_set.all %}
+        <div class="row text-secondary">
+            <p class="bg-body-tertiary mt-3 mb-0">Клиент {{ forloop.counter }}</p>
+            <div class="col-6">
+                Почта<br/>
+                <span class="text-white">{{ client.email }}</span>
+            </div>
+            <div class="col-3">
+                Имя<br/>
+                <span class="text-white">
+                        {% if client.first_name %}
+                            {{ client.first_name }}
+                        {% endif %}
+                    </span>
+            </div>
+            <div class="col-3">
+                Фамилия<br/>
+                <span class="text-white">
+                        {% if client.last_name %}
+                            {{ client.last_name }}
+                        {% endif %}
+                    </span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 

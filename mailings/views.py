@@ -25,12 +25,31 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
 
     def get_success_url(self):
-        return reverse('mailings:detail', args=(self.object.pk,))
+        return reverse('mailings:update', args=(self.object.pk,))
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        ClientFormest = inlineformset_factory(Mailing, Client, form=ClientForm, can_delete=True, extra=1)
+        if self.request.method == 'POST':
+            formset = ClientFormest(self.request.POST, instance=self.object)
+        else:
+            formset = ClientFormest(instance=self.object)
+
+        context_data['formset'] = formset
+        return context_data
 
     def form_valid(self, form):
         new_mailing = form.save(commit=False)
         new_mailing.owner = self.request.user
         new_mailing.save()
+
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        self.object = form.save()
+
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
 
         return super().form_valid(form)
 
@@ -76,6 +95,7 @@ class MailingDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
         return is_owner
+
 
 
 class MailingDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
