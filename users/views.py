@@ -2,12 +2,13 @@ import secrets
 import string
 
 from django.conf import settings
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 
-from users.forms import UserRegisterForm, UserProfileForm
+from users.forms import UserRegisterForm, UserProfileForm, UserCustomUpdateForm
 from users.models import User
 
 
@@ -66,3 +67,39 @@ def generate_random_str(len_str=8):
         letters_and_digits) for _ in range(len_str))
 
 
+class UserListView(UserPassesTestMixin, ListView):
+    model = User
+
+    def test_func(self):
+        is_moderator = self.request.user.has_perm('users.moderator')
+        return is_moderator
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.exclude(pk=self.request.user.pk)
+        return queryset
+
+
+class UserDetailView(UserPassesTestMixin, DetailView):
+    model = User
+
+    def test_func(self):
+        is_moderator = self.request.user.has_perm('users.moderator')
+        return is_moderator
+
+
+class UserUpdateView(UserPassesTestMixin, UpdateView):
+    model = User
+    form_class = UserCustomUpdateForm
+
+    def get_success_url(self):
+        return reverse('users:update', args=(self.object.pk,))
+
+    def test_func(self):
+        is_moderator = self.request.user.has_perm('users.moderator')
+        return is_moderator
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=None)
+        form.fields['status'].widget.attrs['style'] = 'width:auto;'
+        return form

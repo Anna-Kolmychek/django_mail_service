@@ -13,10 +13,11 @@ class MailingListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_authenticated:
-            queryset = queryset.filter(owner=self.request.user).all()
-        else:
+        print(self.request.user.has_perm('users.moderator'))
+        if not self.request.user.is_authenticated:
             queryset = Mailing.objects.none()
+        elif not self.request.user.has_perm('users.moderator'):
+            queryset = queryset.filter(owner=self.request.user).all()
         return queryset
 
 
@@ -64,7 +65,8 @@ class MailingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def test_func(self):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
-        return is_owner
+        is_moderator = self.request.user.has_perm('users.moderator')
+        return is_owner or is_moderator
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -75,7 +77,27 @@ class MailingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             formset = ClientFormest(instance=self.object)
 
         context_data['formset'] = formset
+
+        if self.request.user.has_perm('users.moderator'):
+            for form in formset:
+                form.fields['email'].disabled = True
+                form.fields['first_name'].disabled = True
+                form.fields['last_name'].disabled = True
+                form.fields['DELETE'].disabled = True
         return context_data
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=None)
+
+        if self.request.user.has_perm('users.moderator'):
+            form.fields['title'].disabled = True
+            form.fields['description'].disabled = True
+            form.fields['sending_time_start'].disabled = True
+            form.fields['sending_time_end'].disabled = True
+            form.fields['periodicity'].disabled = True
+            form.fields['mail_title'].disabled = True
+            form.fields['mail_content'].disabled = True
+        return form
 
     def form_valid(self, form):
         context_data = self.get_context_data()
@@ -94,8 +116,8 @@ class MailingDetailView(UserPassesTestMixin, LoginRequiredMixin, DetailView):
     def test_func(self):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
-        return is_owner
-
+        is_moderator = self.request.user.has_perm('users.moderator')
+        return is_owner or is_moderator
 
 
 class MailingDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
@@ -106,3 +128,4 @@ class MailingDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
         return is_owner
+

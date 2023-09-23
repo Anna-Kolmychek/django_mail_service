@@ -5,8 +5,7 @@
 <div class="row align-items-center">
     <div class="col-7 text-center">
         <h1 class="pb-3">
-            <span class="text-danger">Удаление рассылки:</span><br/>
-            {{ object.title }}
+            <span class="text-danger">Удаление рассылки</span><br/>
         </h1>
         <form method="post">
             {% csrf_token %}
@@ -31,9 +30,15 @@
     <div class="col-6">
         <div class="pb-4">
                 <span class="text-secondary">
+                    Название рассылки<br/>
+                </span>
+            {{ object.title }}
+        </div>
+        <div class="pb-4">
+                <span class="text-secondary">
                     Описание рассылки<br/>
                 </span>
-            {{ object.desription }}
+            {{ object.description }}
         </div>
         <div class="pb-4">
             <div class="row">

@@ -29,7 +29,7 @@ class Mailing(models.Model):
     )
 
     title = models.CharField(max_length=150, verbose_name='Название')
-    desription = models.TextField(verbose_name='Описание', **NULLABLE)
+    description = models.TextField(verbose_name='Описание', **NULLABLE)
 
     sending_time_start = models.TimeField(verbose_name='Время отправки (с)', default=datetime.time(10, 0))
     sending_time_end = models.TimeField(verbose_name='Время отправки (до)', default=datetime.time(11, 0))
@@ -41,8 +41,8 @@ class Mailing(models.Model):
     mail_title = models.CharField(max_length=300, verbose_name='Тема письма')
     mail_content = models.TextField(verbose_name='Содержание письма')
 
-    user_admin = User.objects.get(email='admin@mail.com').pk
-    owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, default=user_admin)
+    # user_admin = User.objects.get(email='admin@mail.com').pk
+    owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, default=1)
 
     # связь с клиентами
 
