@@ -5,12 +5,28 @@
 
 {% block light_block %}
 <div class="row align-items-center">
-    <div class="col-8 text-center">
-        <h1 class="">Блог</h1>
-        <p class="fs-3">о работе сервиса и многом другом</p>
+    <div class="col-9 text-center">
+        <h1 class="">Сервис управления рассылками</h1>
+        <p class="fs-4">Здесь вы можете создать и настроить ваши рассылки,<br />
+            а также в нашем блоге узнать много полезной информации.</p>
+        <hr />
+        <h3>Немного статистики</h3>
+        <table class="container-fluid">
+            <tr>
+                <td width="33%">Всего у нас <br> сделано рассылок</td>
+                <td width="33%">Из них выполняются <br> прямо сейчас</td>
+                <td>Скольким людям <br> мы доставили письма</td>
+            </tr>
+            <tr>
+                <td class="fs-3"><b>{{ mailings_count }}</b></td>
+                <td class="fs-3"><b>{{ mailings_active_count }}</b></td>
+                <td class="fs-3"><b>{{ clients_count }}</b></td>
+            </tr>
+        </table>
+
     </div>
-    <div class="col-4">
-        <img src="{% static 'blog/img/list_main_img.png' %}" class="img-fluid"/>
+    <div class="col-3 text-center">
+        <img src="{% static 'main/img/list_main_img.png' %}" class="img-fluid"/>
     </div>
 </div>
 {% endblock %}
