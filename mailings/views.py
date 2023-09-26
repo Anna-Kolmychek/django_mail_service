@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
-from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
@@ -13,7 +12,6 @@ class MailingListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print(self.request.user.has_perm('users.moderator'))
         if not self.request.user.is_authenticated:
             queryset = Mailing.objects.none()
         elif not self.request.user.has_perm('users.moderator'):
@@ -128,4 +126,3 @@ class MailingDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         pk = self.kwargs.get('pk')
         is_owner = Mailing.objects.get(pk=pk).owner == self.request.user
         return is_owner
-

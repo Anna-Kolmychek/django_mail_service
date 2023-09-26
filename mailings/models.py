@@ -44,8 +44,6 @@ class Mailing(models.Model):
     # user_admin = User.objects.get(email='admin@mail.com').pk
     owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, default=1)
 
-    # связь с клиентами
-
     def __str__(self):
         return self.title
 
@@ -67,3 +65,26 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+
+
+class MailingLog(models.Model):
+    STATUS_SUCCESS = 'success'
+    STATUS_FAIL = 'fail'
+    STATUSES = (
+        (STATUS_SUCCESS, 'Отправлено'),
+        (STATUS_FAIL, 'Ошибка'),
+    )
+
+    mailing_date = models.DateField(auto_now_add=True, verbose_name='Дата отправки')
+    mailing_time = models.TimeField(auto_now_add=True, verbose_name='Время отправки')
+    status = models.CharField(max_length=10, choices=STATUSES, verbose_name='Статус')
+    server_ans = models.CharField(max_length=150, verbose_name='Ответ сервера', **NULLABLE)
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='Рассылка')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент')
+
+    def __str__(self):
+        return f'{self.mailing_date} {self.mailing_time} ({self.status})'
+
+    class Meta:
+        verbose_name = 'Лог рассылки'
+        verbose_name_plural = 'Логи рассылок'

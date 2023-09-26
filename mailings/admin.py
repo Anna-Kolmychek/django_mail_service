@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from mailings.models import Mailing, Client
+from mailings.models import Mailing, Client, MailingLog
 
 
 @admin.register(Mailing)
@@ -15,3 +15,9 @@ class MailingAdmin(admin.ModelAdmin):
 class ClientAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'mailing', ]
     list_filter = ['mailing', ]
+
+
+@admin.register(MailingLog)
+class MailingLogAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in MailingLog._meta.get_fields()]
+    list_filter = ['status', 'mailing_date']
