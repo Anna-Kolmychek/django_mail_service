@@ -11,23 +11,23 @@
             Новая рассылка
             {% endif %}
         </h1>
-        <br />
+        <br/>
         <form method="post">
-        <button type="submit" class="btn btn-secondary btn-lg">
-            {% if object %}
-            Сохранить
-            {% else %}
-            Создать
+            <button type="submit" class="btn btn-secondary btn-lg">
+                {% if object %}
+                Сохранить
+                {% else %}
+                Создать
+                {% endif %}
+            </button>
+            <a class="btn btn-secondary btn-lg" href="{% url 'mailings:list' %}">
+                К списку рассылок
+            </a>
+            {% if perms.users.moderator %}
+            <a class="btn btn-secondary btn-lg" href="{% url 'users:detail' object.owner.pk %}">
+                К пользователю
+            </a>
             {% endif %}
-        </button>
-        <a class="btn btn-secondary btn-lg" href="{% url 'mailings:list' %}">
-            К списку рассылок
-        </a>
-        {% if perms.users.moderator %}
-        <a class="btn btn-secondary btn-lg" href="{% url 'users:detail' object.owner.pk %}">
-            К пользователю
-        </a>
-        {% endif %}
     </div>
     <div class="col-4">
         {% if object %}
@@ -43,107 +43,105 @@
 {% block dark_block %}
 
 
-    {% csrf_token %}
-    <div class="row">
-        <div class="col-6">
-            {% if perms.users.moderator %}
-            <div class="pb-3">
+{% csrf_token %}
+<div class="row">
+    <div class="col-6">
+        {% if perms.users.moderator %}
+        <div class="pb-3">
                 <span class="text-secondary">
                     Владелец рассылки:
                 </span>
-                {{ object.owner }}
-            </div>
-            {% endif %}
-            <div class="pb-3">
+            {{ object.owner }}
+        </div>
+        {% endif %}
+        <div class="pb-3">
                 <span class="text-secondary">
                     Название рассылки
                 </span>
-                {{ form.title }}
-            </div>
-            <div class="pb-3">
+            {{ form.title }}
+        </div>
+        <div class="pb-3">
                 <span class="text-secondary">
                     Описание рассылки
                 </span>
-                {{ form.description }}
-            </div>
-            <div class="pb-3">
-                <div class="row">
-                    <div class="col-6">
+            {{ form.description }}
+        </div>
+        <div class="pb-3">
+            <div class="row">
+                <div class="col-6">
                         <span class="text-secondary">
                             Время отправки (с)
                         </span>
-                        {{ form.sending_time_start }}
-                    </div>
-                    <div class="col-6">
+                    {{ form.sending_time_start }}
+                </div>
+                <div class="col-6">
                         <span class="text-secondary">
                             Время отправки (по)
                         </span>
-                        {{ form.sending_time_end }}
-                    </div>
+                    {{ form.sending_time_end }}
                 </div>
             </div>
-            <div class="pb-3">
-                <div class="row">
-                    <div class="col-6">
+        </div>
+        <div class="pb-3">
+            <div class="row">
+                <div class="col-6">
                         <span class="text-secondary">
                             Периодичность
                         </span>
-                        {{ form.periodicity }}
-                    </div>
-                    <div class="col-6">
+                    {{ form.periodicity }}
+                </div>
+                <div class="col-6">
                         <span class="text-secondary">
                             Статус
                         </span>
-                        {{ form.status }}
-                    </div>
+                    {{ form.status }}
                 </div>
             </div>
-            <div class="pb-3">
+        </div>
+        <div class="pb-3">
                 <span class="text-secondary">
                     Заголовок письма
                 </span>
-                {{ form.mail_title }}
-            </div>
-            <div class="pb-3">
+            {{ form.mail_title }}
+        </div>
+        <div class="pb-3">
                 <span class="text-secondary">
                     Тело письма
                 </span>
-                {{ form.mail_content }}
-            </div>
-        </div>
-        <div class="col-6">
-            {{ formset.management_form }}
-            {% for form in formset %}
-            <div class="pb-3 text-secondary">
-                <div class="row bg-body-tertiary mx-0 mt-4">
-                    <div class="col-9">
-                        Клиент {{ forloop.counter }}
-                    </div>
-                    <div class="col-3 text-end">
-                        Удалить {{ form.DELETE }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        Почта {{ form.email }}
-                    </div>
-                    <div class="col-3">
-                        Имя {{ form.first_name }}
-                    </div>
-                    <div class="col-3">
-                        Фамилия {{ form.last_name }}
-                    </div>
-<!--                    <div>-->
-<!--                        Комментарий-->
-<!--                        {{ form.comment }}-->
-<!--                    </div>-->
-                    {{ form.id }}{{ form.mailing }}
-                </div>
-            </div>
-            {% endfor %}
+            {{ form.mail_content }}
         </div>
     </div>
+    <div class="col-6">
+        {{ formset.management_form }}
+        {% for form in formset %}
+        <div class="pb-3 text-secondary">
+            <div class="row bg-body-tertiary mx-0 mt-4">
+                <div class="col-9">
+                    Клиент {{ forloop.counter }}
+                </div>
+                <div class="col-3 text-end">
+                    Удалить {{ form.DELETE }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    Почта {{ form.email }}
+                </div>
+                <div class="col-3">
+                    Имя {{ form.first_name }}
+                </div>
+                <div class="col-3">
+                    Фамилия {{ form.last_name }}
+                </div>
+                <!--                    <div>-->
+                <!--                        Комментарий-->
+                <!--                        {{ form.comment }}-->
+                <!--                    </div>-->
+                {{ form.id }}{{ form.mailing }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 </form>
-
-
 {% endblock %}

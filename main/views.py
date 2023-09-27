@@ -1,13 +1,16 @@
-from django.shortcuts import render
 from django.views.generic import ListView
 
 from blog.models import Article
+from blog.services import get_cached_articles_list
 from mailings.models import Mailing, Client
 
 
 class MainListView(ListView):
     model = Article
     template_name = 'main/index.html'
+
+    def get_queryset(self):
+        return get_cached_articles_list()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -19,4 +22,3 @@ class MainListView(ListView):
         context['mailings_active_count'] = mailings_active_count
         context['clients_count'] = clients_count
         return context
-

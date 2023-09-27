@@ -13,9 +13,9 @@
     </div>
     <div class="col-2">
         {% if object.preview %}
-            <img src="{% mediapath object.preview %}" class="img-fluid" />
+        <img src="{% mediapath object.preview %}" class="img-fluid"/>
         {% else %}
-            <img src="{% static 'blog/img/article_default_img.png' %}" class="img-fluid" />
+        <img src="{% static 'blog/img/article_default_img.png' %}" class="img-fluid"/>
         {% endif %}
     </div>
 </div>
@@ -25,11 +25,11 @@
 {% block dark_block %}
 <div class="row-col g-4 text-start text-secondary">
     <p class="text-end">
-        {{ object.published_at }}<br />
+        {{ object.published_at }}<br/>
         Просмотров: {{ object.views_count }}
     </p>
     <hr>
-    {{ object.text }}
+    {{ object.text | safe }}
 </div>
 
 

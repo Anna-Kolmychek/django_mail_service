@@ -51,7 +51,7 @@
             </div>
             <div class="card-body text-secondary">
                 {% if perms.users.moderator %}
-                <b>Владелец:</b><br />
+                <b>Владелец:</b><br/>
                 {{ object.owner }}
                 <hr>
                 <b>Описание:</b><br/>
@@ -78,7 +78,5 @@
         </div>
     </div>
     {% endfor %}
-
-
 </div>
 {% endblock %}

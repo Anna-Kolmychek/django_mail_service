@@ -51,7 +51,7 @@
                         <p class="card-text text-end"><small class="text-secondary">{{ object.published_at }}</small>
                         </p>
                         <hr>
-                        <p class="card-text text-secondary">{{ object.text | truncatechars:40 }}</p>
+                        <p class="card-text text-secondary">{{ object.text | safe | truncatechars:40 }}</p>
 
                         <p class="card-text text-end"><small class="text-secondary">
                             <a class="btn btn-outline-secondary" href="{% url 'blog:detail' object.pk %}">

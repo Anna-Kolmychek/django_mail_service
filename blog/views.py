@@ -1,11 +1,14 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
 from blog.models import Article
+from blog.services import get_cached_articles_list
 
 
 class BlogListView(ListView):
     model = Article
+
+    def get_queryset(self):
+        return get_cached_articles_list()
 
 
 class BlogDetailView(DetailView):
@@ -17,4 +20,3 @@ class BlogDetailView(DetailView):
         article.views_count += 1
         article.save()
         return context_data
-
