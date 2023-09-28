@@ -128,6 +128,12 @@ python3 manage.py loaddata data_blog.json
 python3 manage.py runserver
 ```
 
+9. Запустить crontab
+```
+python3 manage.py crontab add
+```
+
+
 ### Почтовый сервер запущен, можно работать!
 
 Для знакомства с функциональностью вы можете использовать созданных пользователей
